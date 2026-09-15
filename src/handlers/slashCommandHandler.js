@@ -77,9 +77,12 @@ function getSlashOptionDefinitions(command) {
 }
 
 function commandPayload(command, name) {
+    const usage = command.usage ? command.usage.replace(/\s+/g, ' ').trim() : '';
     const payload = {
         name,
-        description: `${command.name} komutunu çalıştırır.`.slice(0, 100),
+        description: usage
+            ? `Kullanım: /${name} ${usage}`.slice(0, 100)
+            : `${command.name} komutu. Parametre gerekmez.`.slice(0, 100),
     };
 
     const options = getSlashOptionDefinitions(command);
