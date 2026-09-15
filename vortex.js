@@ -1,6 +1,30 @@
 const { Client, Collection } = require('discord.js');
 const client = (global.client = new Client({ fetchAllMembers: true }));
-const { readdirSync, statSync } = require('fs');
+const { existsSync, readFileSync, readdirSync, statSync } = require('fs');
+const path = require('path');
+
+function loadEnvFile() {
+    const envPath = path.join(__dirname, '.env');
+    if (!existsSync(envPath)) return;
+
+    const lines = readFileSync(envPath, 'utf8').split(/\r?\n/);
+    for (const line of lines) {
+        const trimmedLine = line.trim();
+        if (!trimmedLine || trimmedLine.startsWith('#')) continue;
+
+        const separator = trimmedLine.indexOf('=');
+        if (separator === -1) continue;
+
+        const key = trimmedLine.slice(0, separator).trim();
+        let value = trimmedLine.slice(separator + 1).trim();
+        if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+            value = value.slice(1, -1);
+        }
+        if (key && process.env[key] === undefined) process.env[key] = value;
+    }
+}
+
+loadEnvFile();
 require('./src/configs/settings.js')(client);
 require('./src/handlers/functions.js')(client);
 const { Token } = client.settings;
