@@ -4,7 +4,7 @@
 * Herkesin bildiği gibi ilk önce bilgisayarınıza Node JS ve ayarları daha rahat yapabilmek için bir editör *(örneğin Visual Studio Code)* indirmeniz gerekiyor.
 * Botun kalıcı verileri tek sunucu için `data/store.json` dosyasında tutulur. Bu dosya bot çalışırken otomatik oluşturulur.
 * Projeyi zip dosyası halinde indirin ve herhangi bir klasöre zip dosyasını çıkarın.
-* Bot tokenini kaynak koduna yazmak yerine çalışma ortamında yalnızca `DISCORD_TOKEN` ortam değişkenini tanımlayın. Sunucu ve rol ID'leri gibi bot ayarlarını `src/configs/settings.js` içindeki ilgili alanlara girin.
+* Bot tokenini kaynak koduna yazmak yerine proje klasöründe `.env` adında bir dosya oluşturun ve içine `DISCORD_TOKEN=BOT_TOKENIN` yazın. `.env.example` dosyasını örnek olarak kullanabilirsiniz. Sunucu ve rol ID'leri gibi bot ayarlarını `src/configs/settings.js` içindeki ilgili alanlara girin.
 * Daha sonra editörünüzün terminalini yada klasörünuzun bulunduğu dizinde `cmd` veya `powershell` penceresini açın.
 * Ve `npm i` yazarak otomatik olarak gerekli tüm modülleri indirin.
 * Bu işlem de bittikten sonra pencerede `node .` veya `npm start` yazarak botunuzu çalıştırın!
