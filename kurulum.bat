@@ -1,6 +1,6 @@
 @echo off
 setlocal
-title Vortex Moderation - Kurulum
+title Darth.vfx - Kurulum
 
 cd /d "%~dp0"
 
