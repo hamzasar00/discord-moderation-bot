@@ -20,15 +20,8 @@ if not exist "node_modules\" (
 )
 
 if not defined DISCORD_TOKEN if not exist ".env" (
-    echo.
-    echo .env dosyasi bulunamadi.
-    echo Token GitHub'a kaydedilmez; sadece bu calisma icin sorulacak.
-    set /p "DISCORD_TOKEN=Discord bot tokenini girin: "
-    echo.
-)
-
-if not defined DISCORD_TOKEN if not exist ".env" (
-    echo [HATA] DISCORD_TOKEN girilmedi.
+    echo [HATA] .env dosyasi bulunamadi.
+    echo Once kurulum.bat dosyasini calistirip Discord tokenini kaydedin.
     pause
     exit /b 1
 )

@@ -26,6 +26,28 @@ if errorlevel 1 (
 )
 
 echo.
+if not exist ".env" (
+    echo Discord bot tokeni .env dosyasina kaydedilecek.
+    echo Bu dosya GitHub'a gonderilmez.
+    echo.
+    set "DISCORD_TOKEN="
+    set /p "DISCORD_TOKEN=Discord bot tokenini girin: "
+
+    if not defined DISCORD_TOKEN (
+        echo.
+        echo [HATA] Token girilmedi. Kurulum tamamlanamadi.
+        pause
+        exit /b 1
+    )
+
+    >".env" echo DISCORD_TOKEN=%DISCORD_TOKEN%
+    echo.
+    echo Token .env dosyasina kaydedildi.
+) else (
+    echo .env dosyasi zaten mevcut, token yeniden sorulmadi.
+)
+
+echo.
 echo Kurulum tamamlandi.
 echo Botu baslatmak icin baslat.bat dosyasini calistirin.
 pause

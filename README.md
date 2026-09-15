@@ -4,11 +4,11 @@
 * Herkesin bildiği gibi ilk önce bilgisayarınıza Node JS ve ayarları daha rahat yapabilmek için bir editör *(örneğin Visual Studio Code)* indirmeniz gerekiyor.
 * Botun kalıcı verileri tek sunucu için `data/store.json` dosyasında tutulur. Bu dosya bot çalışırken otomatik oluşturulur.
 * Projeyi zip dosyası halinde indirin ve herhangi bir klasöre zip dosyasını çıkarın.
-* Bot tokenini kaynak koduna yazmak yerine proje klasöründe `.env` adında bir dosya oluşturun ve içine `DISCORD_TOKEN=BOT_TOKENIN` yazın. `.env.example` dosyasını örnek olarak kullanabilirsiniz. Sunucu ve rol ID'leri gibi bot ayarlarını `src/configs/settings.js` içindeki ilgili alanlara girin.
+* Bot tokenini kaynak koduna yazmayın. Windows kullanıyorsanız `kurulum.bat` dosyası tokeni bir kez sorup proje klasöründe `.env` dosyasına kaydeder; sonraki çalıştırmalarda `baslat.bat` token sormaz. `.env` dosyası GitHub'a gönderilmez. Sunucu ve rol ID'leri gibi bot ayarlarını `src/configs/settings.js` içindeki ilgili alanlara girin.
 * Daha sonra editörünüzün terminalini yada klasörünuzun bulunduğu dizinde `cmd` veya `powershell` penceresini açın.
 * Ve `npm i` yazarak otomatik olarak gerekli tüm modülleri indirin.
 * Bu işlem de bittikten sonra pencerede `node .` veya `npm start` yazarak botunuzu çalıştırın!
-* Windows kullanıyorsanız bu işlemler için önce `kurulum.bat`, ardından `baslat.bat` dosyasını çalıştırabilirsiniz.
+* Windows kullanıyorsanız önce `kurulum.bat`, ardından her açılışta `baslat.bat` dosyasını çalıştırabilirsiniz.
 * Bot davet edilirken `applications.commands` yetkisini de içeren davet bağlantısını kullanın. Slash komutları `src/configs/settings.js` içindeki `guildID` doluysa sunucuya anında, boşsa global olarak kaydedilir; global komutların görünmesi Discord tarafında daha uzun sürebilir.
 ## Glitch kullanıcıları için :
 * Glitch platformunda `New Project` butonuna tıklayın, çıkan seçimler arasında en aşağıda bulunan `Import from GitHub` seçeneğine tıklayıp çıkan pencereye altyapı adresini girin ve Tamam'a tıklayın!

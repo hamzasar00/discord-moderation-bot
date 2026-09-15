@@ -31,9 +31,9 @@ function slugifyCommandName(name) {
         .slice(0, 32);
 }
 
-function commandPayload(command) {
+function commandPayload(command, name) {
     return {
-        name: slugifyCommandName(command.name),
+        name,
         description: `${command.name} komutunu çalıştırır.`.slice(0, 100),
         options: [{
             name: 'args',
@@ -51,12 +51,20 @@ function getCommandScope(client) {
 
 async function registerSlashCommands(client) {
     const desired = new Map();
+
+    const addCommand = (name, command) => {
+        const slug = slugifyCommandName(name);
+        if (!slug || desired.has(slug)) return;
+        desired.set(slug, command);
+    };
+
     client.commands.forEach(command => {
         if (command.name === 'eval') return;
 
-        const name = slugifyCommandName(command.name);
-        if (!name || desired.has(name)) return;
-        desired.set(name, command);
+        addCommand(command.name, command);
+        if (Array.isArray(command.aliases)) {
+            command.aliases.forEach(alias => addCommand(alias, command));
+        }
     });
 
     client.slashCommands = new Collection();
@@ -67,7 +75,7 @@ async function registerSlashCommands(client) {
     const registeredByName = new Map((registered || []).map(command => [command.name, command]));
 
     for (const [name, command] of desired) {
-        const data = commandPayload(command);
+        const data = commandPayload(command, name);
         const current = registeredByName.get(name);
 
         if (current) await scope(current.id).patch({ data });
@@ -179,10 +187,24 @@ async function respondToInteraction(client, interaction, data) {
 }
 
 async function handleSlashCommand(client, interaction) {
+    if (interaction && interaction.d) interaction = interaction.d;
     if (!interaction || interaction.type !== 2) return;
 
-    const command = client.slashCommands && client.slashCommands.get(interaction.data.name);
-    if (!command) return;
+    const interactionName = interaction.data && interaction.data.name;
+    const normalizedName = slugifyCommandName(interactionName || '');
+    const command = client.slashCommands && (
+        client.slashCommands.get(interactionName) ||
+        client.slashCommands.get(normalizedName)
+    );
+
+    if (!command) {
+        console.warn(`[SLASH] Komut bulunamadı: ${interactionName || 'unknown'}`);
+        await respondToInteraction(client, interaction, {
+            type: 4,
+            data: { content: 'Bu slash komutu artık kullanılabilir değil. Komut listesini yenileyin.' },
+        }).catch(error => console.error('[SLASH] Bilinmeyen komut yanıtlanamadı', error));
+        return;
+    }
 
     let acknowledged = false;
     try {
