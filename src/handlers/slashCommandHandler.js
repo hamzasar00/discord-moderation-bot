@@ -41,25 +41,40 @@ const customSlashOptions = {
         { name: 'sebep', description: 'İşlem sebebi.', type: 3, required: false },
     ],
     yasaklıtag: [
-        { name: 'islem', description: 'Yasaklı tag işlemi.', type: 3, required: false, choices: actionChoices(['ekle', 'sil', 'say', 'liste']) },
+        { name: 'islem', description: 'Yasaklı tag işlemi.', type: 3, required: false, choices: actionChoices(['ekle', 'sil', 'bilgi', 'say', 'liste']) },
         { name: 'tag', description: 'Eklenecek veya silinecek tag.', type: 3, required: false },
     ],
     katıldı: [
         { name: 'islem', description: 'Katılma rolü işlemi.', type: 3, required: false, choices: actionChoices(['ver', 'al']) },
     ],
+    ekip: [
+        { name: 'ekip', description: 'Ekip numarası veya ekip adı yaz. Tüm ekipler için listeyi seç.', type: 3, required: false },
+    ],
+    yetkilisay: [
+        { name: 'islem', description: 'Yetkilileri listele veya DM bildirimi gönder.', type: 3, required: false, choices: actionChoices(['liste', 'dm']) },
+    ],
     yönetici: [
         { name: 'islem', description: 'Yönetici işlemi.', type: 3, required: false, choices: actionChoices(['aç', 'kapat', 'al', 'ver', 'bilgi']) },
-        { name: 'hedef', description: 'İşlem yapılacak üye veya bot.', type: 3, required: false },
+        { name: 'kullanici', description: 'İşlem yapılacak üye.', type: 6, required: false },
+        { name: 'rol', description: 'İşlem yapılacak rol.', type: 8, required: false },
+        { name: 'hedef_tipi', description: 'Bilgi için hedef türü.', type: 3, required: false, choices: actionChoices(['üye', 'bot']) },
+        { name: 'sebep', description: 'İşlem sebebi.', type: 3, required: false },
     ],
     rol: [
         { name: 'islem', description: 'Rol işlemi.', type: 3, required: false, choices: actionChoices(['ver', 'al']) },
-        { name: 'hedef', description: 'Üye, rol veya kanal etiketi/ID’si.', type: 3, required: false },
+        { name: 'kullanici', description: 'Rol verilecek/alınacak üye.', type: 6, required: false },
+        { name: 'hedef_rol', description: 'Rol verilecek/alınacak toplu işlem rolü.', type: 8, required: false },
+        { name: 'kanal', description: 'Rol verilecek/alınacak ses kanalı.', type: 7, required: false },
         { name: 'rol_veya_isim', description: 'Verilecek veya alınacak rol adı/ID’si.', type: 3, required: false },
     ],
     yetki: [
         { name: 'islem', description: 'Yetki işlemi.', type: 3, required: false, choices: actionChoices(['ekle', 'sil', 'düzenle', 'ver', 'al', 'bilgi', 'liste']) },
         { name: 'isim', description: 'Yetki adı.', type: 3, required: false },
-        { name: 'hedef', description: 'Üye, rol veya kanal etiketi/ID’si.', type: 3, required: false },
+        { name: 'hedef_tipi', description: 'Düzenleme türü.', type: 3, required: false, choices: actionChoices(['yetkililer', 'yetkiler']) },
+        { name: 'kullanici', description: 'Yetki verilecek/alınacak üye.', type: 6, required: false },
+        { name: 'rol', description: 'Yetki verilecek/alınacak rol.', type: 8, required: false },
+        { name: 'kanal', description: 'Yetki verilecek/alınacak ses kanalı.', type: 7, required: false },
+        { name: 'roller', description: 'Düzenleme için rol ID’lerini boşlukla yaz.', type: 3, required: false },
     ],
 };
 
