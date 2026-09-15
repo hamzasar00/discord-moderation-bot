@@ -19,6 +19,20 @@ if not exist "node_modules\" (
     exit /b 1
 )
 
+if not defined DISCORD_TOKEN if not exist ".env" (
+    echo.
+    echo .env dosyasi bulunamadi.
+    echo Token GitHub'a kaydedilmez; sadece bu calisma icin sorulacak.
+    set /p "DISCORD_TOKEN=Discord bot tokenini girin: "
+    echo.
+)
+
+if not defined DISCORD_TOKEN if not exist ".env" (
+    echo [HATA] DISCORD_TOKEN girilmedi.
+    pause
+    exit /b 1
+)
+
 echo Bot baslatiliyor...
 echo Durdurmak icin bu pencereyi kapatabilir veya CTRL+C kullanabilirsiniz.
 echo.
