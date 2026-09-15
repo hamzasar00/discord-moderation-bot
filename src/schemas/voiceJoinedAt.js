@@ -1,9 +1,6 @@
-const { Schema, model } = require("mongoose");
+const { createJsonModel } = require('./jsonModel.js');
 
-const voiceJoinedAt = Schema({
-    userID: { type: String, default: "" },
-    guildID: { type: String, default: "" },
-    date: Number,
+module.exports = createJsonModel('voiceJoinedAt', {
+  userID: '',
+  guildID: '',
 });
-
-module.exports = model("voiceJoinedAt", voiceJoinedAt);

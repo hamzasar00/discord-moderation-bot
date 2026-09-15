@@ -1,12 +1,10 @@
-const { Schema, model } = require("mongoose");
+const { createJsonModel } = require('./jsonModel.js');
 
-const roleLog = Schema({
-    type: { type: String, default: "" },
-    guildID: { type: String, default: "" },
-    staffID: { type: String, default: "" },
-    userID: { type: String, default: "" },
-    roleID: { type: String, default: "" },
-    date: { type: Number, default: Date.now() },
+module.exports = createJsonModel('roleLog', {
+  type: '',
+  guildID: '',
+  staffID: '',
+  userID: '',
+  roleID: '',
+  date: Date.now,
 });
-
-module.exports = model("roleLog", roleLog);

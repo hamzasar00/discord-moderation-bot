@@ -1,8 +1,6 @@
-const { Schema, model } = require("mongoose");
+const { createJsonModel } = require('./jsonModel.js');
 
-const penalCounters = Schema({
-  guildID: { type: String, unique: true, required: true },
-  value: { type: Number, default: 0 },
+module.exports = createJsonModel('penalCounters', {
+  guildID: '',
+  value: 0,
 });
-
-module.exports = model("penalCounters", penalCounters);

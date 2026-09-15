@@ -1,10 +1,8 @@
-const { Schema, model } = require("mongoose");
+const { createJsonModel } = require('./jsonModel.js');
 
-const reload = Schema({
-    type: { type: String, default: "moderation"},
-    authorID: { type: String, default: "" },
-    channelID: { type: String, default: "" },
-    messageID: { type: String, default: "" },
+module.exports = createJsonModel('reload', {
+  type: 'moderation',
+  authorID: '',
+  channelID: '',
+  messageID: '',
 });
-
-module.exports = model("reload", reload);

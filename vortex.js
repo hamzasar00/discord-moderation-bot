@@ -10,7 +10,6 @@ client.commands = new Collection();
 client.cooldowns = new Collection();
 
 // Handlers
-require('./src/handlers/mongoHandler.js');
 require('./src/handlers/eventHandler.js');
 
 // Checking Commands

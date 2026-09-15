@@ -1,14 +1,11 @@
-const { Schema, model } = require("mongoose");
+const { createJsonModel } = require('./jsonModel.js');
 
-const snipe = Schema({
-  guildID: { type: String, default: "" },
-  channelID: { type: String, default: "" },
-  authorID: { type: String, default: ""},
-  userID: { type: String, default: "" },
-  messageContent: { type: String, default: "" },
-  image: { type: String, default: "" },
-  createdDate: Number,
-  deletedDate: { type: Number, default: Date.now() }
+module.exports = createJsonModel('snipe', {
+  guildID: '',
+  channelID: '',
+  authorID: '',
+  userID: '',
+  messageContent: '',
+  image: '',
+  deletedDate: Date.now,
 });
-
-module.exports = model("snipe", snipe);

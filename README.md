@@ -2,10 +2,9 @@
 # ✨ Kurulum
 ### Projeyi botunuzda kullanmak için bazı işlemler yapmanız gerekiyor. Aşağıdaki yönlendirmeleri takip ederek bunu yapabilirsiniz :
 * Herkesin bildiği gibi ilk önce bilgisayarınıza Node JS ve ayarları daha rahat yapabilmek için bir editör *(örneğin Visual Studio Code)* indirmeniz gerekiyor.
-* Ve veritabanı için bir MongoDB bağlantı linkinizin olması gerekiyor.
-    * Not: Eğer **MongoDB** hakkında bilginiz yoksa video platformlarından ayrıntılı bilgi alabilirsiniz.
+* Botun kalıcı verileri tek sunucu için `data/store.json` dosyasında tutulur. Bu dosya bot çalışırken otomatik oluşturulur.
 * Projeyi zip dosyası halinde indirin ve herhangi bir klasöre zip dosyasını çıkarın.
-* Bot tokenini kaynak koduna yazmak yerine çalışma ortamında `DISCORD_TOKEN` ve `MONGO_URL` ortam değişkenlerini tanımlayın. Sunucu ve rol ID'leri gibi bot ayarlarını `src/configs/settings.js` içindeki ilgili alanlara girin.
+* Bot tokenini kaynak koduna yazmak yerine çalışma ortamında yalnızca `DISCORD_TOKEN` ortam değişkenini tanımlayın. Sunucu ve rol ID'leri gibi bot ayarlarını `src/configs/settings.js` içindeki ilgili alanlara girin.
 * Daha sonra editörünüzün terminalini yada klasörünuzun bulunduğu dizinde `cmd` veya `powershell` penceresini açın.
 * Ve `npm i` yazarak otomatik olarak gerekli tüm modülleri indirin.
 * Bu işlem de bittikten sonra pencerede `node .` veya `npm start` yazarak botunuzu çalıştırın!
@@ -25,9 +24,9 @@
 ### Botunuzun doğru ve hatasız çalışması için `settings.js` dosyasını doğru bir şekilde doldurmanız gerekiyor. Aşağıdaki yönlendirmeleri takip ederek bazı ayarları yapabilirsiniz :
 
 * `client.settings` ve `client.statusMessages` kısmı botunuzun, `client.systemEmojis` kısmı kullanılacak olan emojilerin ve `client.guildSettings` kısmı ise sunucunuzun gerekli ayarlarıdır.
-* `DISCORD_TOKEN` veya `MONGO_URL` tanımlı değilse bot güvenli şekilde başlatılmaz; eksik ayar mesajını konsolda gösterir.
+* `DISCORD_TOKEN` tanımlı değilse bot güvenli şekilde başlatılmaz; eksik ayar mesajını konsolda gösterir.
 * `eval` komutu varsayılan olarak kapalıdır. Yalnızca kontrollü bir geliştirme ortamında gerekiyorsa `ENABLE_EVAL=true` ile açın; üretimde açık bırakmayın.
-* Botunuzun yapmış olduğum diğer altyapıları kullanan botlarınızla uyumlu olarak çalışması için tüm botlarda `client.settings.MongoURL` kısmına aynı bağlantı linkini ve `client.settings.OtherBots` dizinine diğer botlarınızın Discord'da ki ID'lerini girmelisiniz.
+* Bot tek sunucu için tasarlanmıştır; veriler `data/store.json` içinde tutulduğu için farklı botlarla ortak veritabanı kullanılmaz.
 * Altyapıdaki komutların çoğunda yavaş mod mevcuttur ve bunu **Sunucu Yöneticisi** ve **Bot Altı Yönetici** yetkisine sahip yetkililere kapatmak için `client.settings.DisableCooldownsForAdmins` kısmını aktif hale getirebilirsiniz.
 * `client.systemEmojis` dizini botunuzun kullanmak için sunucunuza kuracağı emoji bilgilerini gösteriyor. Dizine belirtilen şekilde yeni emoji bilgileri ekleyerek belirttiğiniz emojilerinde sunucunuza kurulmasını sağlaya bilirsiniz. Bu emojilerin kurulması için botunuzu aktifleşdirdikten sonra **Emojikur** komutunu kullanmanız gerekmektedir.
     * Bilgi: **Emojikur** komutunu kullandıktan sonra botunuz emojileri sunucuya kurar ve `src/configs/emojis.json` dosyasına kaydeder. Gerektiği zaman da bu dosyadan alıp kullanır ve sizde tüm emojileri `<:name:id>` şeklinde botunuza kaydetme zahmetinden kurtulursunuz.

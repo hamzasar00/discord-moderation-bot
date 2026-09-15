@@ -15,7 +15,6 @@
         VoiceChannel: "",
         Activity: "LISTENING",
         Status: "idle",
-        MongoURL: process.env.MONGO_URL || "",
         Footer: "SeonerVorteX",
         DisableCooldownsForAdmins: true,
 
