@@ -15,7 +15,7 @@
         VoiceChannel: "",
         Activity: "LISTENING",
         Status: "idle",
-        Footer: "SeonerVorteX",
+        Footer: "Darth.vfx",
         DisableCooldownsForAdmins: true,
 
     };
@@ -23,9 +23,9 @@
     //Activity Messages
     client.statusMessages = [
 
-        "Only VorteX!",
-        "Created By VorteX!",
-        "discord.gg/MTNkXHnX3b"
+        "Darth.vfx",
+        "Darth.vfx Moderasyon",
+        "Darth.vfx"
 
     ];
 

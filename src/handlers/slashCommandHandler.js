@@ -31,17 +31,61 @@ function slugifyCommandName(name) {
         .slice(0, 32);
 }
 
-function commandPayload(command, name) {
-    return {
-        name,
-        description: `${command.name} komutunu çalıştırır.`.slice(0, 100),
-        options: [{
-            name: 'args',
-            description: 'Komut parametreleri (ID, sebep veya diğer değerler).',
+function getSlashOptionDefinitions(command) {
+    const usage = command.usage || '';
+    if (!usage) return [];
+
+    const definitions = [];
+    const counters = {};
+    const addMatches = (pattern, baseName, description) => {
+        for (const match of usage.matchAll(pattern)) {
+            counters[baseName] = (counters[baseName] || 0) + 1;
+            definitions.push({
+                position: match.index,
+                name: counters[baseName] === 1 ? baseName : `${baseName}${counters[baseName]}`,
+                description,
+                type: 3,
+                required: false,
+            });
+        }
+    };
+
+    addMatches(/@Üye\/ID/gi, 'kullanici', 'Üye etiketi veya kullanıcı ID’si.');
+    addMatches(/#Kanal\/ID/gi, 'kanal', 'Kanal etiketi veya kanal ID’si.');
+    addMatches(/@Rol\/ID/gi, 'rol', 'Rol etiketi veya rol ID’si.');
+    addMatches(/Sebep/gi, 'sebep', 'İşlem sebebi veya açıklaması.');
+    addMatches(/Süre/gi, 'sure', 'Süre. Örnek: 1h, 30m, 10s.');
+    addMatches(/Ceza ID/gi, 'ceza_id', 'Ceza ID’si.');
+    addMatches(/Mesaj Sayı/gi, 'miktar', 'Mesaj sayısı.');
+    addMatches(/Saniye Cinsinden Sayı/gi, 'saniye', 'Saniye cinsinden süre.');
+    addMatches(/Ekip Numarası/gi, 'ekip', 'Ekip numarası.');
+    addMatches(/Rol İsmi\/ID/gi, 'rol_veya_isim', 'Rol adı veya rol ID’si.');
+    addMatches(/<ID>/gi, 'id', 'Kullanıcı veya kayıt ID’si.');
+
+    if (!definitions.length) {
+        return [{
+            name: 'parametre',
+            description: 'Komutun istediği bilgileri yaz.',
             type: 3,
             required: false,
-        }],
+        }];
+    }
+
+    return definitions
+        .sort((left, right) => left.position - right.position)
+        .map(({ position, ...definition }) => definition);
+}
+
+function commandPayload(command, name) {
+    const payload = {
+        name,
+        description: `${command.name} komutunu çalıştırır.`.slice(0, 100),
     };
+
+    const options = getSlashOptionDefinitions(command);
+    if (options.length) payload.options = options;
+
+    return payload;
 }
 
 function getCommandScope(client) {
@@ -80,6 +124,15 @@ async function registerSlashCommands(client) {
     await scope.put({ data: commandData });
 
     console.log(`[SLASH] ${desired.size} komut ${guildID ? `sunucuya (${guildID})` : 'global olarak'} kaydedildi.`);
+
+    if (guildID) {
+        const globalScope = client.api.applications(client.user.id).commands;
+        const globalCommands = await globalScope.get();
+        if (globalCommands && globalCommands.length) {
+            await globalScope.put({ data: [] });
+            console.log(`[SLASH] ${globalCommands.length} eski global komut temizlendi.`);
+        }
+    }
 }
 
 function serializeMessage(message) {
@@ -122,7 +175,6 @@ function createInteractionChannel(client, interaction, channel) {
 
 function getOptionText(interaction) {
     return (interaction.data.options || [])
-        .filter(option => option.name === 'args')
         .map(option => String(option.value))
         .join(' ')
         .trim();
