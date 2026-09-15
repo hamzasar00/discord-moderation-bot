@@ -17,7 +17,12 @@ module.exports = async (message) => {
 
     if(afkData) {
 
-        if(message.member.displayName.includes("[AFK]") && message.member.manageable) await message.member.setNickname(message.member.displayName.replace("[AFK]", ""));
+        if (message.member.manageable) {
+            const nickname = afkData.originalNickname || null;
+            await message.member.setNickname(nickname).catch(error => {
+                console.error('[AFK] Eski nickname geri yüklenemedi', error);
+            });
+        }
         message.channel.success(message, Embed.setDescription(`${message.member.toString()}, Başarıyla AFK modundan çıktın. Toplam **${moment.duration(Date.now() - afkData.date).format("d [gün,] H [saat,] m [dakika,] s [saniyedir]")}** AFK'dın`), { timeout: 6000 });
         await afk.deleteOne({ guildID: message.guild.id, userID: message.author.id });
     
