@@ -49,6 +49,11 @@ function getCommandScope(client) {
     return guildID ? application.guilds(guildID).commands : application.commands;
 }
 
+const slashAliases = {
+    help: ['yardım', 'komutlar'],
+    sicilbilgi: ['log'],
+};
+
 async function registerSlashCommands(client) {
     const desired = new Map();
 
@@ -62,8 +67,8 @@ async function registerSlashCommands(client) {
         if (command.name === 'eval') return;
 
         addCommand(command.name, command);
-        if (Array.isArray(command.aliases)) {
-            command.aliases.forEach(alias => addCommand(alias, command));
+        if (slashAliases[command.name]) {
+            slashAliases[command.name].forEach(alias => addCommand(alias, command));
         }
     });
 
@@ -71,16 +76,8 @@ async function registerSlashCommands(client) {
     desired.forEach((command, name) => client.slashCommands.set(name, command));
 
     const scope = getCommandScope(client);
-    const registered = await scope.get();
-    const registeredByName = new Map((registered || []).map(command => [command.name, command]));
-
-    for (const [name, command] of desired) {
-        const data = commandPayload(command, name);
-        const current = registeredByName.get(name);
-
-        if (current) await scope(current.id).patch({ data });
-        else await scope.post({ data });
-    }
+    const commandData = Array.from(desired, ([name, command]) => commandPayload(command, name));
+    await scope.put({ data: commandData });
 
     console.log(`[SLASH] ${desired.size} komut ${guildID ? `sunucuya (${guildID})` : 'global olarak'} kaydedildi.`);
 }

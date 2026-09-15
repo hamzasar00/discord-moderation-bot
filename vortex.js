@@ -9,18 +9,18 @@ function loadEnvFile() {
 
     const lines = readFileSync(envPath, 'utf8').split(/\r?\n/);
     for (const line of lines) {
-        const trimmedLine = line.trim();
+        const trimmedLine = line.replace(/^\uFEFF/, '').trim();
         if (!trimmedLine || trimmedLine.startsWith('#')) continue;
 
         const separator = trimmedLine.indexOf('=');
         if (separator === -1) continue;
 
-        const key = trimmedLine.slice(0, separator).trim();
+        const key = trimmedLine.slice(0, separator).trim().replace(/^\uFEFF/, '');
         let value = trimmedLine.slice(separator + 1).trim();
         if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
             value = value.slice(1, -1);
         }
-        if (key && process.env[key] === undefined) process.env[key] = value;
+        if (key && (process.env[key] === undefined || process.env[key] === '')) process.env[key] = value;
     }
 }
 

@@ -72,7 +72,7 @@
     client.guildSettings = {
 
         ///General
-        guildID: "",
+        guildID: "1543556484703588473",
         guildTags: [],
         guildDiscriminator: "",
         guildTeams: [],
