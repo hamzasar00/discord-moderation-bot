@@ -31,33 +31,66 @@ function slugifyCommandName(name) {
         .slice(0, 32);
 }
 
+const actionChoices = values => values.map(value => ({ name: value, value }));
+
+const customSlashOptions = {
+    cezapuan: [
+        { name: 'islem', description: 'Ceza puanı işlemi.', type: 3, required: false, choices: actionChoices(['ekle', 'sil']) },
+        { name: 'kullanici', description: 'Puanı görüntülenecek veya değiştirilecek üye.', type: 6, required: false },
+        { name: 'miktar', description: 'Eklenecek veya silinecek puan miktarı.', type: 4, required: false },
+        { name: 'sebep', description: 'İşlem sebebi.', type: 3, required: false },
+    ],
+    yasaklıtag: [
+        { name: 'islem', description: 'Yasaklı tag işlemi.', type: 3, required: false, choices: actionChoices(['ekle', 'sil', 'say', 'liste']) },
+        { name: 'tag', description: 'Eklenecek veya silinecek tag.', type: 3, required: false },
+    ],
+    katıldı: [
+        { name: 'islem', description: 'Katılma rolü işlemi.', type: 3, required: false, choices: actionChoices(['ver', 'al']) },
+    ],
+    yönetici: [
+        { name: 'islem', description: 'Yönetici işlemi.', type: 3, required: false, choices: actionChoices(['aç', 'kapat', 'al', 'ver', 'bilgi']) },
+        { name: 'hedef', description: 'İşlem yapılacak üye veya bot.', type: 3, required: false },
+    ],
+    rol: [
+        { name: 'islem', description: 'Rol işlemi.', type: 3, required: false, choices: actionChoices(['ver', 'al']) },
+        { name: 'hedef', description: 'Üye, rol veya kanal etiketi/ID’si.', type: 3, required: false },
+        { name: 'rol_veya_isim', description: 'Verilecek veya alınacak rol adı/ID’si.', type: 3, required: false },
+    ],
+    yetki: [
+        { name: 'islem', description: 'Yetki işlemi.', type: 3, required: false, choices: actionChoices(['ekle', 'sil', 'düzenle', 'ver', 'al', 'bilgi', 'liste']) },
+        { name: 'isim', description: 'Yetki adı.', type: 3, required: false },
+        { name: 'hedef', description: 'Üye, rol veya kanal etiketi/ID’si.', type: 3, required: false },
+    ],
+};
+
 function getSlashOptionDefinitions(command) {
     const usage = command.usage || '';
     if (!usage) return [];
+    if (customSlashOptions[command.name]) return customSlashOptions[command.name];
 
     const definitions = [];
     const counters = {};
-    const addMatches = (pattern, baseName, description) => {
+    const addMatches = (pattern, baseName, description, type = 3) => {
         for (const match of usage.matchAll(pattern)) {
             counters[baseName] = (counters[baseName] || 0) + 1;
             definitions.push({
                 position: match.index,
                 name: counters[baseName] === 1 ? baseName : `${baseName}${counters[baseName]}`,
                 description,
-                type: 3,
+                type,
                 required: false,
             });
         }
     };
 
-    addMatches(/@Üye\/ID/gi, 'kullanici', 'Üye etiketi veya kullanıcı ID’si.');
-    addMatches(/#Kanal\/ID/gi, 'kanal', 'Kanal etiketi veya kanal ID’si.');
-    addMatches(/@Rol\/ID/gi, 'rol', 'Rol etiketi veya rol ID’si.');
+    addMatches(/@Üye\/ID/gi, 'kullanici', 'Üye seç.', 6);
+    addMatches(/#Kanal\/ID/gi, 'kanal', 'Kanal seç.', 7);
+    addMatches(/@Rol\/ID/gi, 'rol', 'Rol seç.', 8);
     addMatches(/Sebep/gi, 'sebep', 'İşlem sebebi veya açıklaması.');
     addMatches(/Süre/gi, 'sure', 'Süre. Örnek: 1h, 30m, 10s.');
     addMatches(/Ceza ID/gi, 'ceza_id', 'Ceza ID’si.');
-    addMatches(/Mesaj Sayı/gi, 'miktar', 'Mesaj sayısı.');
-    addMatches(/Saniye Cinsinden Sayı/gi, 'saniye', 'Saniye cinsinden süre.');
+    addMatches(/Mesaj Sayı/gi, 'miktar', 'Mesaj sayısı.', 4);
+    addMatches(/Saniye Cinsinden Sayı/gi, 'saniye', 'Saniye cinsinden süre.', 4);
     addMatches(/Ekip Numarası/gi, 'ekip', 'Ekip numarası.');
     addMatches(/Rol İsmi\/ID/gi, 'rol_veya_isim', 'Rol adı veya rol ID’si.');
     addMatches(/<ID>/gi, 'id', 'Kullanıcı veya kayıt ID’si.');
@@ -167,18 +200,32 @@ function createInteractionChannel(client, interaction, channel) {
     const webhook = client.api.webhooks(client.user.id, interaction.token);
 
     interactionChannel.send = async (content) => {
-        const response = await webhook.post({ data: serializeMessage(content) });
+        const response = await webhook.post({
+            data: serializeMessage(content),
+            query: { wait: true },
+            auth: false,
+        });
         return createWebhookMessage(client, interaction, channel, response);
     };
-    interactionChannel.success = (message, text) => interactionChannel.send(text);
-    interactionChannel.error = (message, text) => interactionChannel.send(text);
+    const safeSend = text => interactionChannel.send(text).catch(error => {
+        console.error('[SLASH] Yanıt gönderilemedi', error);
+        return null;
+    });
+    interactionChannel.success = (message, text) => safeSend(text);
+    interactionChannel.error = (message, text) => safeSend(text);
 
     return interactionChannel;
 }
 
 function getOptionText(interaction) {
     return (interaction.data.options || [])
-        .map(option => String(option.value))
+        .map(option => {
+            const value = String(option.value);
+            if (option.type === 6) return `<@${value}>`;
+            if (option.type === 7) return `<#${value}>`;
+            if (option.type === 8) return `<@&${value}>`;
+            return value;
+        })
         .join(' ')
         .trim();
 }
@@ -235,7 +282,7 @@ async function getInteractionMessage(client, interaction) {
 }
 
 async function respondToInteraction(client, interaction, data) {
-    return client.api.interactions(interaction.id, interaction.token).callback.post({ data });
+    return client.api.interactions(interaction.id, interaction.token).callback.post({ data, auth: false });
 }
 
 async function handleSlashCommand(client, interaction) {
