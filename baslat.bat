@@ -1,6 +1,6 @@
 @echo off
 setlocal
-title Vortex Moderation - Bot
+title Darth.vfx - Bot
 
 cd /d "%~dp0"
 
@@ -33,7 +33,7 @@ if not defined DISCORD_TOKEN if not exist ".env" (
     exit /b 1
 )
 
-echo Bot baslatiliyor...
+echo Darth.vfx baslatiliyor...
 echo Durdurmak icin bu pencereyi kapatabilir veya CTRL+C kullanabilirsiniz.
 echo.
 call npm start
