@@ -1,9 +1,9 @@
 
 # ✨ Kurulum
 ### Projeyi botunuzda kullanmak için bazı işlemler yapmanız gerekiyor. Aşağıdaki yönlendirmeleri takip ederek bunu yapabilirsiniz :
-* Herkesin bildiği gibi ilk önce bilgisayarınıza [Node JS](https://nodejs.org/tr/) ve ayarları daha rahat yapa bilmek için bir editör *(Örneğin [Visual Studio Code](https://code.visualstudio.com/))* indirmeniz gerekiyor.
-* Ve veritabanı için bir [MongoDB](https://mongodb.com/) bağlantı linkinizin olması gerekiyor.
-    * Not: Eğer **MongoDB** hakkında bilginiz yoksa [Youtube](https://www.youtube.com/) gibi platformlardan ayrıntılı bilgi ala bilirsiniz.
+* Herkesin bildiği gibi ilk önce bilgisayarınıza Node JS ve ayarları daha rahat yapabilmek için bir editör *(örneğin Visual Studio Code)* indirmeniz gerekiyor.
+* Ve veritabanı için bir MongoDB bağlantı linkinizin olması gerekiyor.
+    * Not: Eğer **MongoDB** hakkında bilginiz yoksa video platformlarından ayrıntılı bilgi alabilirsiniz.
 * Projeyi zip dosyası halinde indirin ve herhangi bir klasöre zip dosyasını çıkarın.
 * Bot tokenini kaynak koduna yazmak yerine çalışma ortamında `DISCORD_TOKEN` ve `MONGO_URL` ortam değişkenlerini tanımlayın. Sunucu ve rol ID'leri gibi bot ayarlarını `src/configs/settings.js` içindeki ilgili alanlara girin.
 * Daha sonra editörünüzün terminalini yada klasörünuzun bulunduğu dizinde `cmd` veya `powershell` penceresini açın.
@@ -12,7 +12,7 @@
 * Windows kullanıyorsanız bu işlemler için önce `kurulum.bat`, ardından `baslat.bat` dosyasını çalıştırabilirsiniz.
 * Bot davet edilirken `applications.commands` yetkisini de içeren davet bağlantısını kullanın. Slash komutları `src/configs/settings.js` içindeki `guildID` doluysa sunucuya anında, boşsa global olarak kaydedilir; global komutların görünmesi Discord tarafında daha uzun sürebilir.
 ## Glitch kullanıcıları için :
-* Glitch platformunda `New Project` butonuna tıklayın, çıkan seçimler arasında en aşağıda bulunan `Import from GitHub` seçeneğine tıklayıp çıkan pencereye bu Altyapının linkini girin ve Tamam'a tıklayın!
+* Glitch platformunda `New Project` butonuna tıklayın, çıkan seçimler arasında en aşağıda bulunan `Import from GitHub` seçeneğine tıklayıp çıkan pencereye altyapı adresini girin ve Tamam'a tıklayın!
 * `package.json` dosyasını Glitch'e uygun olarak değiştirin!
 * Ve bir kaç sistem hatası almamak için `package.json` dosyasına aşağıdaki kodu girin :
 ```json
@@ -43,11 +43,5 @@
     * Bilgi: **Bot Altı Yönetici** rolü botunuzun %75'lik kısmına diğer roller ihtiyaç olmaksızın erişe bilmesini sağlar. Eğer sunucunuzda botunuzun çoğu komutuna erişip ama **Sunucu Yöneticisi** yetkisini vermek istemediğiniz üyeler varsa onlara bu rolü verebilirsiniz.
 
 📌 Diğer ayarlarıda doğru bir şekilde girerek bu kısmıda başarıyla tamamlaya bilirsiniz!
-
-# ⚡ İletişim
-### Eğer bir hatayla karşılaşıyor veya botunuzu kurmakta sorun yaşıyorsanız aşağıdaki bağlantılardan bana ulaşabilirsiniz :
-* [Discord Sunucum](https://discord.gg/MTNkXHnX3b)
-* [Ana Hesabım](https://discord.com/users/624914071984013313)
-* [Yan Hesabım](https://discord.com/users/809325505304068096)
 
 ## Önemli: Proje MIT lisansına sahiptir ve projenin dosyalarının izin alınmadan paylaşılması, satılması  veya benzeri durumlar kesinlikle yasaktır. Böyle bir durumun yaşanması sonucunda bundan sorumlu şahıs(lar)a gerekli işlemler yapılacaktır!
